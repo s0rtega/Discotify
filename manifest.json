@@ -1,0 +1,36 @@
+{
+  "AppName": {
+    "en": "Discotify"
+  },
+  "BundleIdentifier": "discotify",
+  "AppDescription": {
+    "en": "Create palylist from Discogs user´s collections"
+  },
+  "AcceptedLinkTypes": [
+    "playlist"
+  ],
+  "BundleType": "Application",
+  "BundleVersion": "0.2",
+  "DefaultTabs": [
+    {
+      "arguments": "index",
+      "title": {
+        "en": "Home"
+      }
+    },
+    {
+      "arguments": "tabs",
+      "title": {
+        "en": "How to use tabs"
+      }
+    }
+  ],
+  "Dependencies": {
+    "api": "1.38.0",
+    "views": "1.18.1"
+  },
+  "SupportedLanguages": [
+    "en"
+  ],
+  "VendorIdentifier": "com.spotify"
+}

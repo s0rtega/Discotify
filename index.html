@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="$views/css/image.css">
+        <link rel="stylesheet" href="$views/css/list.css">
+        <link rel="stylesheet" href="$views/css/buttons.css">
+        <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="css/github.css">
+        <script src='http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js'></script>
+
+        <script language="javascript">
+        catalog = ""
+        var catalogArray = new Array();
+
+        $(function(){                 
+          $(".catalogLoader").click(function(){
+            $.getJSON( "http://api.discogs.com/users/OjoDeGato/collection/folders/0/releases", function(data){   
+                 $.each(data.releases, function(i,release) {
+                   catalog += release.basic_information.title+" - "+release.basic_information.artists[0].name+"<br/>";
+                   catalogArray.push(release.basic_information.title+" - "+release.basic_information.artists[0].name);
+                   }); 
+
+                   // Search album URI for albums found in the catalog
+                   require(['$api/search#Search'], function(Search) {
+                        var search = Search.search(catalogArray[0]);
+                        search.albums.snapshot(0, 1).done(function(snapshot) {
+                            console.log('Found', snapshot.length, 'result(s) for', search.query);
+                            snapshot.loadAll('name').done(function(albums) {
+                                albums.forEach(function(album) {
+                                    require(['$api/models'], function(models) {
+                                        models.Playlist.create("OjoDeGato´s collection");
+                                        //models.Playlist.fromURI('spotify:user:thelinmichael:playlist:4GiqW15bSO7K6MLFVRVh4z').load('tracks').done(function(playlist) {
+                                            //track = models.Track.fromURI("spotify:track:3fllpI9uZKkdy3NJS0J1oV");
+                                            //playlist.tracks.add(track);
+                                    }); 
+                                });
+                            });
+                        });
+                    });
+
+                    $("#userCatalog").replaceWith("<br/>"+catalog);
+               });                         
+          });
+        });
+        </script>
+
+    </head>
+    <body>
+        <div id="wrapper">
+            <img src='http://s.pixogs.com/images/discogs-white.png?3'></img>
+
+            <div id='container'>
+                <input type="button" class="catalogLoader" value="load Discogs">
+                <div id='userCatalog'>
+                    <h1>Get a playlist from a discogs´s user catalog!</h1>
+                    <p>Just push the botton to get the user: OjoDeGato</p>
+                </div>
+            </div>
+        </div>
+
+    </body>
+</html>
