@@ -18,28 +18,44 @@
                  $.each(data.releases, function(i,release) {
                    catalog += release.basic_information.title+" - "+release.basic_information.artists[0].name+"<br/>";
                    catalogArray.push(release.basic_information.title+" - "+release.basic_information.artists[0].name);
-                   }); 
-
+                   }); 				   
                    // Search album URI for albums found in the catalog
-                   require(['$api/search#Search'], function(Search) {
-                        var search = Search.search(catalogArray[0]);
-                        search.albums.snapshot(0, 1).done(function(snapshot) {
-                            console.log('Found', snapshot.length, 'result(s) for', search.query);
-                            snapshot.loadAll('name').done(function(albums) {
-                                albums.forEach(function(album) {
-                                    require(['$api/models'], function(models) {
-                                        models.Playlist.create("OjoDeGato´s collection");
-                                        //models.Playlist.fromURI('spotify:user:thelinmichael:playlist:4GiqW15bSO7K6MLFVRVh4z').load('tracks').done(function(playlist) {
-                                            //track = models.Track.fromURI("spotify:track:3fllpI9uZKkdy3NJS0J1oV");
-                                            //playlist.tracks.add(track);
-                                    }); 
-                                });
-                            });
-                        });
-                    });
-
+                   require(['$api/search#Search','$api/models'], function(Search, models) {				   
+						// Create and add to a var the playlist
+				   		models.Playlist.create("OjoDeGato´s collection").done(function(loadedPlaylist) {
+							playlist = loadedPlaylist
+						});							
+						// Iterate over all the albums-artist save from discogs
+						$.each(catalogArray, function(catalogAlbum) {						
+							// Get all the possible albums (just getting the first)
+							var search = Search.search(catalogAlbum);
+							search.albums.snapshot(0, 1).done(function(snapshot) {
+								//console.log('Found', snapshot.length, 'result(s) for', search.query);
+								snapshot.loadAll('name').done(function(albums) {
+									// TODO: Just take first so it´s not neccesary
+									albums.forEach(function(album) {
+										// Add tracks to playlist and populate
+										playlist.load("tracks").done(function(loadedPlaylist) {
+											album = models.Album.fromURI(album);
+											// Populate the playlist with the tracks for the album
+											album.load("tracks").done(function(albumlist) {
+												albumlist.tracks.snapshot().done(function(snapshot) {
+													console.log(snapshot);
+													for (var i = 0, l = snapshot.length; i < l; i++) {
+														var track = snapshot.get(i);
+														// Add all the tracks to the playlist
+														loadedPlaylist.tracks.add(models.Track.fromURI(track.uri));
+													}
+												});
+											});
+										});
+									});
+								});
+							});
+						});
                     $("#userCatalog").replaceWith("<br/>"+catalog);
                });                         
+			});  
           });
         });
         </script>
