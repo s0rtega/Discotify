@@ -26,7 +26,7 @@
 							playlist = loadedPlaylist
 						});							
 						// Iterate over all the albums-artist save from discogs
-						$.each(catalogArray, function(catalogAlbum) {						
+						catalogArray.forEach(function(catalogAlbum) {	
 							// Get all the possible albums (just getting the first)
 							var search = Search.search(catalogAlbum);
 							search.albums.snapshot(0, 1).done(function(snapshot) {
@@ -40,11 +40,10 @@
 											// Populate the playlist with the tracks for the album
 											album.load("tracks").done(function(albumlist) {
 												albumlist.tracks.snapshot().done(function(snapshot) {
-													console.log(snapshot);
 													for (var i = 0, l = snapshot.length; i < l; i++) {
 														var track = snapshot.get(i);
 														// Add all the tracks to the playlist
-														loadedPlaylist.tracks.add(models.Track.fromURI(track.uri));
+														addIfNotDuplicate(track.uri,loadedPlaylist,models);
 													}
 												});
 											});
@@ -58,6 +57,26 @@
 			});  
           });
         });
+		
+		function addIfNotDuplicate(newUri,playlist,models)
+		{
+			playlist.tracks.snapshot().done(function(snapshot) {
+				duplicate = false;
+				for (var i = 0, l = snapshot.length; i < l; i++) {
+					var track = snapshot.get(i);
+					if (track == newUri){
+						console.log("Duplicate: "+track);
+						duplicate = true;
+					}
+				}
+				
+				console.log(duplicate);
+				if (duplicate == false){
+					playlist.tracks.add(models.Track.fromURI(newUri));
+				}
+			});
+		}
+		
         </script>
 
     </head>
