@@ -2,24 +2,46 @@
 <html>
     <head>
         <link rel="stylesheet" href="css/main.css">
+		<link rel="stylesheet" href="$views/css/throbber.css">
         <script src='http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js'></script>
 
         <script language="javascript">
-        catalog = ""
-        var catalogArray = new Array();
 
         $(function(){                 
           $(".catalogLoader").click(function(){
-		    var userName = document.getElementById("userName").value;
-            $.getJSON("http://api.discogs.com/users/"+userName.toLowerCase()+"/collection/folders/0/releases").done(function(data){ 
-				 console.log(data);
-                 $.each(data.releases, function(i,release) {
-                   catalog += release.basic_information.title+" - "+release.basic_information.artists[0].name+"<br/>";
-                   catalogArray.push(release.basic_information.title+" - "+release.basic_information.artists[0].name);
-                   }); 				   
+		    catalog = ""
+			catalogArray = new Array();
+		    userName = document.getElementById("userName").value;
+
+            $.getJSON("http://api.discogs.com/users/"+userName.toLowerCase()+"/collection/folders/0/releases?per_page=100").done(function(data){ 
+					$.each(data.releases, function(i,release) {
+					  catalog += "<a href=http://www.discogs.com/release/"+release.basic_information.resource_url.split("/")[4]+">"+release.basic_information.artists[0].name+" - "+release.basic_information.title+"<br/></a>";
+					  catalogArray.push(release.basic_information.title+" - "+release.basic_information.artists[0].name);
+					  }); 	
+					  
+					//console.log(catalog); <- NOT WORKING
                    // Search album URI for albums found in the catalog
-					require(['$api/search#Search','$api/models','$api/library#Library'], function(Search, models,Library) {					
+ 				   	//for (var i=2, l = data.pagination.pages; i <= l; i++) {
+					//	$.getJSON (data.pagination.urls.next).done(function(data){
+					//	console.log(catalog);
+					//	return;
+					//	 $.each(data.releases, function(i,release) {
+					//	   catalog += "<a href=http://www.discogs.com/release/"+release.basic_information.resource_url.split("/")[4]+">"+release.basic_information.artists[0].name+" - "+release.basic_information.title+"<br/></a>";
+					//	   catalogArray.push(release.basic_information.title+" - "+release.basic_information.artists[0].name);
+					//	   });
+					//});
+					
+					require(['$api/search#Search','$api/models','$api/library#Library', '$views/throbber#Throbber'], function(Search, models, Library, Throbber) {
+					
+					var userCatalogDiv = document.getElementById('userCatalog');
+					var throbber = Throbber.forElement(userCatalogDiv);
+					throbber.show();
+					window.setTimeout(function() {
+						throbber.hide();
+						}, 4000);
+						
 					exists = false;
+					
 					// Check if the user have the playlist and return a new or find playlist object
 				    returnedLibrary = Library.forCurrentUser();
 					returnedLibrary.playlists.snapshot().done(function(snapshot) {
@@ -38,15 +60,17 @@
 								addSongs(Search,models,playlist);
 							});
 						}
-					$("#userCatalog").empty();
+					
+					$("#userCatalog").html(" ");
                     $("#userCatalog").append("<br/>"+catalog);
 					});	
                });                         
 			})
 			.fail(function(error){
-				$("#userCatalog").empty();
+				$("#userCatalog").html(" ");
 				$("#userCatalog").append("Sorry, we can´t access to this user collection!");
 			});
+
           });
         });
 		
@@ -112,6 +136,7 @@
 										for (var i = 0, l = snapshot.length; i < l; i++) {
 											var track = snapshot.get(i);
 											// Add all the tracks to the playlist
+											//playlist.tracks.add(models.Track.fromURI(newUri));
 											addIfNotDuplicate(track.uri,loadedPlaylist,models);
 										}
 									});
@@ -122,7 +147,6 @@
 				});
 			});
 		}
-		
 		
         </script>
 
@@ -140,11 +164,9 @@
 					<img id="discotifyImg" src='http://s.pixogs.com/images/discogs-white.png?3'></img>
 					<form id="userSearch">
 						<input type="text" id="userName" class="userSearchInput" name="q" size="21" maxlength="120"> <input type="button" class="catalogLoader" value=">">
-					</form>	 	  
+					</form>	 
 				</div>
-				
-				<div id='userCatalog'></div>	
-				
+				<div id='userCatalog'></div>				
             </div>
         </div>
 
