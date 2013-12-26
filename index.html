@@ -1,11 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link rel="stylesheet" href="$views/css/image.css">
-        <link rel="stylesheet" href="$views/css/list.css">
-        <link rel="stylesheet" href="$views/css/buttons.css">
         <link rel="stylesheet" href="css/main.css">
-        <link rel="stylesheet" href="css/github.css">
         <script src='http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js'></script>
 
         <script language="javascript">
@@ -14,47 +10,43 @@
 
         $(function(){                 
           $(".catalogLoader").click(function(){
-            $.getJSON( "http://api.discogs.com/users/OjoDeGato/collection/folders/0/releases", function(data){   
+		    var userName = document.getElementById("userName").value;
+            $.getJSON("http://api.discogs.com/users/"+userName.toLowerCase()+"/collection/folders/0/releases").done(function(data){ 
+				 console.log(data);
                  $.each(data.releases, function(i,release) {
                    catalog += release.basic_information.title+" - "+release.basic_information.artists[0].name+"<br/>";
                    catalogArray.push(release.basic_information.title+" - "+release.basic_information.artists[0].name);
                    }); 				   
                    // Search album URI for albums found in the catalog
-                   require(['$api/search#Search','$api/models'], function(Search, models) {				   
-						// Create and add to a var the playlist
-				   		models.Playlist.create("OjoDeGato´s collection").done(function(loadedPlaylist) {
-							playlist = loadedPlaylist
-						});							
-						// Iterate over all the albums-artist save from discogs
-						catalogArray.forEach(function(catalogAlbum) {	
-							// Get all the possible albums (just getting the first)
-							var search = Search.search(catalogAlbum);
-							search.albums.snapshot(0, 1).done(function(snapshot) {
-								//console.log('Found', snapshot.length, 'result(s) for', search.query);
-								snapshot.loadAll('name').done(function(albums) {
-									// TODO: Just take first so it´s not neccesary
-									albums.forEach(function(album) {
-										// Add tracks to playlist and populate
-										playlist.load("tracks").done(function(loadedPlaylist) {
-											album = models.Album.fromURI(album);
-											// Populate the playlist with the tracks for the album
-											album.load("tracks").done(function(albumlist) {
-												albumlist.tracks.snapshot().done(function(snapshot) {
-													for (var i = 0, l = snapshot.length; i < l; i++) {
-														var track = snapshot.get(i);
-														// Add all the tracks to the playlist
-														addIfNotDuplicate(track.uri,loadedPlaylist,models);
-													}
-												});
-											});
-										});
-									});
-								});
+					require(['$api/search#Search','$api/models','$api/library#Library'], function(Search, models,Library) {					
+					exists = false;
+					// Check if the user have the playlist and return a new or find playlist object
+				    returnedLibrary = Library.forCurrentUser();
+					returnedLibrary.playlists.snapshot().done(function(snapshot) {
+						for (var i = 0, l = snapshot.length; i < l; i++) {
+						  var playlist = snapshot.get(i);
+						  if (playlist.name == userName.toLowerCase()+"´s collection"){
+							playlist = models.Playlist.fromURI(playlist.uri);
+							exists = true;
+							addSongs(Search,models,playlist);
+							break;
+						  }
+						}
+						if (exists == false){
+							models.Playlist.create(userName.toLowerCase()+"´s collection").done(function(createPlaylist) {
+								playlist = createPlaylist
+								addSongs(Search,models,playlist);
 							});
-						});
-                    $("#userCatalog").replaceWith("<br/>"+catalog);
+						}
+					$("#userCatalog").empty();
+                    $("#userCatalog").append("<br/>"+catalog);
+					});	
                });                         
-			});  
+			})
+			.fail(function(error){
+				$("#userCatalog").empty();
+				$("#userCatalog").append("Sorry, we can´t access to this user collection!");
+			});
           });
         });
 		
@@ -65,11 +57,10 @@
 				for (var i = 0, l = snapshot.length; i < l; i++) {
 					var track = snapshot.get(i);
 					if (track == newUri){
-						console.log("Duplicate: "+track);
+						//console.log("Duplicate: "+track);
 						duplicate = true;
 					}
-				}
-				
+				}				
 				console.log(duplicate);
 				if (duplicate == false){
 					playlist.tracks.add(models.Track.fromURI(newUri));
@@ -77,19 +68,83 @@
 			});
 		}
 		
+		function getUserPlaylist(playlistName,models,returnPlaylist)
+		{
+			exists = false;
+			require(['$api/library#Library'], function(Library) {
+				returnedLibrary = Library.forCurrentUser();
+				returnedLibrary.playlists.snapshot().done(function(snapshot) {
+					for (var i = 0, l = snapshot.length; i < l; i++) {
+					  var playlist = snapshot.get(i);
+					  if (playlist.name == playlistName){
+						//console.log("Lista encontrada");
+						playlist = models.Playlist.fromURI(playlist.uri);
+						exists = true;
+					  }
+					}
+					if (exists == false){
+						//console.log("No existe la lista");
+						models.Playlist.create("OjoDeGato´s collection").done(function(loadedPlaylist) {
+							playlist = loadedPlaylist
+						});
+					}
+				});		
+			});
+		}
+		
+		function addSongs(Search,models,playlist)
+		{
+			// Iterate over all the albums-artist save from discogs
+			catalogArray.forEach(function(catalogAlbum) {	
+				// Get all the possible albums (just getting the first)
+				var search = Search.search(catalogAlbum);
+				search.albums.snapshot(0, 1).done(function(snapshot) {
+					//console.log('Found', snapshot.length, 'result(s) for', search.query);
+					snapshot.loadAll('name').done(function(albums) {
+						// TODO: Just take first so it´s not neccesary
+						albums.forEach(function(album) {
+							// Add tracks to playlist and populate
+							playlist.load("tracks").done(function(loadedPlaylist) {
+								album = models.Album.fromURI(album);
+								// Populate the playlist with the tracks for the album
+								album.load("tracks").done(function(albumlist) {
+									albumlist.tracks.snapshot().done(function(snapshot) {
+										for (var i = 0, l = snapshot.length; i < l; i++) {
+											var track = snapshot.get(i);
+											// Add all the tracks to the playlist
+											addIfNotDuplicate(track.uri,loadedPlaylist,models);
+										}
+									});
+								});
+							});
+						});
+					});
+				});
+			});
+		}
+		
+		
         </script>
 
     </head>
     <body>
         <div id="wrapper">
-            <img src='http://s.pixogs.com/images/discogs-white.png?3'></img>
-
             <div id='container'>
-                <input type="button" class="catalogLoader" value="load Discogs">
-                <div id='userCatalog'>
-                    <h1>Get a playlist from a discogs´s user catalog!</h1>
-                    <p>Just push the botton to get the user: OjoDeGato</p>
+			
+                <div id='title'>
+                    <h1>Discotify!</h1>
+                    <h2>Get a playlist from a discogs´s user catalog</h2>
                 </div>
+				
+				<div id='search'>
+					<img id="discotifyImg" src='http://s.pixogs.com/images/discogs-white.png?3'></img>
+					<form id="userSearch">
+						<input type="text" id="userName" class="userSearchInput" name="q" size="21" maxlength="120"> <input type="button" class="catalogLoader" value=">">
+					</form>	 	  
+				</div>
+				
+				<div id='userCatalog'></div>	
+				
             </div>
         </div>
 

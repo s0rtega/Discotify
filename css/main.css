@@ -76,3 +76,22 @@ ul {margin:0 0 20px;}
 body, html {overflow:visible !important;}
 
 code {-webkit-user-select: auto;}
+
+#userSearch{
+    display:inline;
+	margin-left:auto;
+	margin-right:auto;
+	margin-top:auto;
+	margin-bottom:auto;
+  }
+  
+#userName{
+    display:inline;
+  }
+  
+#discotifyImg{
+	vertical-align:middle; 
+	text-align:center
+  }
+
+ 
