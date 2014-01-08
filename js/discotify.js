@@ -40,7 +40,7 @@ function getCatalogFromDiscogs(){
 
 				$("#userCatalog").html(" ");
 				$("#userCatalog").append("<br/><ul class=\"pagination3\">"+catalog+"<br/></ul>");
-				$("ul.pagination3").quickPager();
+				$("ul.pagination3").quickPager({pageSize:"10"});
 
 				//throbber.hide();						
 			});	
@@ -145,5 +145,3 @@ function addAlbumSongsToPlaylist(playlistSnapshot,albumSnapshot,loadedPlaylist,m
 		}
 	}
 }
-
-$("ul.pagination3").quickPagination({pagerLocation:"both",pageSize:"3"});	

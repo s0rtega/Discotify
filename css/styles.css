@@ -1,6 +1,4 @@
-h1, h2,ul {
-        clear: both;
-}
+
 
 ul.pagination1 li:hover,
 ul.pagination2 li:hover,
@@ -12,12 +10,10 @@ ul.pagination1 li,
 ul.pagination2 li,
 ul.pagination3 li {
     padding: 10px;
-    font-family: georgia;
-        background-color: #8890FC;
-    font-size: 24px;
+    font-size: 13px;
     color: #fff;
     line-height: 1;
-    width: 600px;
+    width: 300px;
     margin-bottom: 1px;
         list-style:none;
 }
@@ -31,8 +27,7 @@ ul.simplePagerNav li{
     float: left;
     padding: 10px;
     margin-bottom: 10px;
-    font-family: georgia;
-        font-size:14px;
+    font-size:14px;
 }
 
 ul.simplePagerNav li a{
