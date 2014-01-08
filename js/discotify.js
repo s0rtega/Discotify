@@ -7,17 +7,17 @@ $(function main(){
 function getCatalogFromDiscogs(){
 
 	catalogArray = new Array();
-	catalog  = ""
-	userName = document.getElementById("userName").value
+	catalog      = ""
+	userName     = document.getElementById("userName").value
 	var urls     = new Array();
 	var jxhr     = [];
 	
-	require(['$views/throbber#Throbber'], function(Throbber) {	
+	require(['$views/throbber#Throbber','$api/models'], function(Throbber,models,List) {	
 		
-		catalogContentDiv = document.getElementById('catalogContent');
-		throbber = Throbber.forElement(catalogContentDiv);
-		$("#userCatalog").html(" ");
-		throbber.show();
+		//catalogContentDiv = document.getElementById('catalogContent');
+		//throbber = Throbber.forElement(catalogContentDiv);
+		//$("#userCatalog").html(" ");
+		//throbber.show();
 		
 		$.getJSON("http://api.discogs.com/users/"+userName.toLowerCase()+"/collection/folders/0/releases?per_page=100").done(function(data){ 
 			$.each(data.releases, function(i,release) {
@@ -37,9 +37,12 @@ function getCatalogFromDiscogs(){
 			});			
 			$.when.apply($, jxhr).done(function() {
 				searchUserPlaylists(catalogArray, userName);
+
 				$("#userCatalog").html(" ");
-				$("#userCatalog").append("<br/>"+catalog);
-				throbber.hide();						
+				$("#userCatalog").append("<br/><ul class=\"pagination3\">"+catalog+"<br/></ul>");
+				$("ul.pagination3").quickPager();
+
+				//throbber.hide();						
 			});	
 		})
 		.fail(function(error){
@@ -51,15 +54,34 @@ function getCatalogFromDiscogs(){
 
 function addToCatalog(release)
 {
-	catalog += "<a href=http://www.discogs.com/release/"+release.basic_information.resource_url.split("/")[4]+">"+release.basic_information.artists[0].name+" - "+release.basic_information.title+"<br/></a>";
+	catalog += "<li><a href=http://www.discogs.com/release/"+release.basic_information.resource_url.split("/")[4]+">"+release.basic_information.artists[0].name+" - "+release.basic_information.title+"<br/></a></li>";
 	catalogArray.push(release.basic_information.title+" - "+release.basic_information.artists[0].name);	
+}
+
+function showPlaylist(uri,models,List)
+{
+	//$("#userCatalog").html(" ");
+	var playlist = models.Playlist.fromURI(uri);
+	var list = List.forPlaylist(playlist);
+
+	list.fetch = "scroll";
+	list.style = "rounded";
+	list.minItemsForScroll = 50;
+	list.viewAllLimit = 3;
+	list.height = "fixed";
+	
+	var userCatalogDiv = document.getElementById("userCatalog");
+	//userCatalogDiv.appendChild(list.node);
+
+	//list.init();
 }
 
 function searchUserPlaylists(catalogArray, userName)
 {		
-	require(['$api/search#Search','$api/models','$api/library#Library'], function(Search, models, Library) {	
+	require(['$api/search#Search','$api/models','$api/library#Library','$views/list#List'], function(Search, models, Library, List) {	
 
-		var exists = false;					
+		var exists = false;	
+		
 		returnedLibrary = Library.forCurrentUser();
 		returnedLibrary.playlists.snapshot().done(function(snapshot) {
 			for (var i = 0, l = snapshot.length; i < l; i++) {
@@ -68,15 +90,19 @@ function searchUserPlaylists(catalogArray, userName)
 				playlist = models.Playlist.fromURI(playlist.uri);
 				exists = true;
 				getAlbumsFromCatalog(catalogArray, Search,models,playlist);
+				showPlaylist(playlist.uri,models,List);
 				break;
 			  }
 			}
 			if (exists == false){
 				models.Playlist.create(userName.toLowerCase()+"´s collection").done(function(createPlaylist) {
 					playlist = createPlaylist
+					showPlaylist(playlist.uri,models,List);
 					getAlbumsFromCatalog(catalogArray, Search,models,playlist)
 				});
 			}
+			
+			
 		});	
 
 	});                     		
@@ -118,4 +144,6 @@ function addAlbumSongsToPlaylist(playlistSnapshot,albumSnapshot,loadedPlaylist,m
 			loadedPlaylist.tracks.add(models.Track.fromURI(track.uri));			
 		}
 	}
-}	
+}
+
+$("ul.pagination3").quickPagination({pagerLocation:"both",pageSize:"3"});	
