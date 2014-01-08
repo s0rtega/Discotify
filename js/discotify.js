@@ -1,0 +1,121 @@
+$(function main(){                 
+	$(".catalogLoader").click(function(){
+	  getCatalogFromDiscogs();
+	}); 
+})
+
+function getCatalogFromDiscogs(){
+
+	catalogArray = new Array();
+	catalog  = ""
+	userName = document.getElementById("userName").value
+	var urls     = new Array();
+	var jxhr     = [];
+	
+	require(['$views/throbber#Throbber'], function(Throbber) {	
+		
+		catalogContentDiv = document.getElementById('catalogContent');
+		throbber = Throbber.forElement(catalogContentDiv);
+		$("#userCatalog").html(" ");
+		throbber.show();
+		
+		$.getJSON("http://api.discogs.com/users/"+userName.toLowerCase()+"/collection/folders/0/releases?per_page=100").done(function(data){ 
+			$.each(data.releases, function(i,release) {
+				addToCatalog(release);
+			}); 	
+			for (var i = 2, p = data.pagination.pages; i <= p; i++) {
+				urls.push("http://api.discogs.com/users/"+userName.toLowerCase()+"/collection/folders/0/releases?per_page=100&page="+i);
+			}
+			$.each(urls, function (i, url) {
+				jxhr.push(
+					$.getJSON(url, function (data) {
+						$.each(data.releases, function(i,release) {
+							addToCatalog(release);
+						});
+					})
+				);
+			});			
+			$.when.apply($, jxhr).done(function() {
+				searchUserPlaylists(catalogArray, userName);
+				$("#userCatalog").html(" ");
+				$("#userCatalog").append("<br/>"+catalog);
+				throbber.hide();						
+			});	
+		})
+		.fail(function(error){
+			$("#userCatalog").html(" ");
+			$("#userCatalog").append("Sorry, we can´t access to this user collection!");
+		});
+	});
+};
+
+function addToCatalog(release)
+{
+	catalog += "<a href=http://www.discogs.com/release/"+release.basic_information.resource_url.split("/")[4]+">"+release.basic_information.artists[0].name+" - "+release.basic_information.title+"<br/></a>";
+	catalogArray.push(release.basic_information.title+" - "+release.basic_information.artists[0].name);	
+}
+
+function searchUserPlaylists(catalogArray, userName)
+{		
+	require(['$api/search#Search','$api/models','$api/library#Library'], function(Search, models, Library) {	
+
+		var exists = false;					
+		returnedLibrary = Library.forCurrentUser();
+		returnedLibrary.playlists.snapshot().done(function(snapshot) {
+			for (var i = 0, l = snapshot.length; i < l; i++) {
+			  var playlist = snapshot.get(i);
+			  if (playlist.name == userName.toLowerCase()+"´s collection"){
+				playlist = models.Playlist.fromURI(playlist.uri);
+				exists = true;
+				getAlbumsFromCatalog(catalogArray, Search,models,playlist);
+				break;
+			  }
+			}
+			if (exists == false){
+				models.Playlist.create(userName.toLowerCase()+"´s collection").done(function(createPlaylist) {
+					playlist = createPlaylist
+					getAlbumsFromCatalog(catalogArray, Search,models,playlist)
+				});
+			}
+		});	
+
+	});                     		
+}
+
+function getAlbumsFromCatalog(catalogArray, Search,models,playlist,deferred)
+{
+	catalogArray.forEach(function(catalogAlbum) {	
+		var search = Search.search(catalogAlbum);
+		search.albums.snapshot(0,1).done(function(snapshot) {
+			snapshot.loadAll('name').done(function(albums) {					
+				loadSongsForAlbums(albums,playlist,models);
+			});
+		});
+	});
+}
+
+function loadSongsForAlbums(albums,playlist,models)
+{
+	playlist.load("tracks").done(function(loadedPlaylist) {
+		albums.forEach(function(album) {
+			var album = models.Album.fromURI(album);
+			album.load("tracks").done(function(albumlist) {
+				albumlist.tracks.snapshot().done(function(albumSnapshot) {	
+					loadedPlaylist.tracks.snapshot().done(function(playlistSnapshot) {
+						addAlbumSongsToPlaylist(playlistSnapshot,albumSnapshot,loadedPlaylist,models)
+					});								
+				});
+			});
+		});
+	});
+}
+
+function addAlbumSongsToPlaylist(playlistSnapshot,albumSnapshot,loadedPlaylist,models)
+{
+	for (var i = 0, l = albumSnapshot.length; i < l; i++) {
+		var track = albumSnapshot.get(i);
+		if (!playlistSnapshot.find(track)){
+			loadedPlaylist.tracks.add(models.Track.fromURI(track.uri));			
+		}
+	}
+}	
