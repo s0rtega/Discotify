@@ -1,5 +1,3 @@
-
-
 ul.pagination1 li:hover,
 ul.pagination2 li:hover,
 ul.pagination3 li:hover {
@@ -36,7 +34,7 @@ ul.simplePagerNav li a{
 }
 
 li.currentPage {
-        background: red;
+    background: red;
     background: #FF9500;        
 }
 

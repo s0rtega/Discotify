@@ -54,8 +54,26 @@ function getCatalogFromDiscogs(){
 
 function addToCatalog(release)
 {
-	catalog += "<li><a href=http://www.discogs.com/release/"+release.basic_information.resource_url.split("/")[4]+">"+release.basic_information.artists[0].name+" - "+release.basic_information.title+"<br/></a></li>";
+	catalog += "<li><a href=\"#\" onClick=\"fetchAlbumInfoFromDiscogs("+release.basic_information.resource_url.split("/")[4]+")\">"+release.basic_information.artists[0].name+" - "+release.basic_information.title+"<br/></a></li>";
 	catalogArray.push(release.basic_information.title+" - "+release.basic_information.artists[0].name);	
+}
+
+function fetchAlbumInfoFromDiscogs(id)
+{
+	var discogsUrl = "http://api.discogs.com/release/"+id+"?f=json"
+	console.log(discogsUrl);
+	$.getJSON(discogsUrl).done(function(data){ 
+		console.log(data);
+		$("#showDiscogs").html(" ");
+		$("#showDiscogs").append("<a href="+data.resp.release.uri+">More information on Discogs</a>");
+		$("#showDiscogs").append("<img src=\""+data.resp.release.thumb+"\">");
+		data.resp.release.artists[0].name;
+		data.resp.release.title
+		data.resp.release.tracklist		
+	})
+	.fail(function(error){
+		console.log(error);
+	});
 }
 
 function showPlaylist(uri,models,List)

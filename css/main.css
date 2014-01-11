@@ -93,3 +93,13 @@ code {-webkit-user-select: auto;}
 	vertical-align:middle; 
 	text-align:center
   }
+  
+#userCatalog {
+    float: left;
+    width: 50%;
+}
+#showDiscogs {
+    overflow: hidden;
+    float: right;
+    width: 50%;
+}
