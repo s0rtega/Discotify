@@ -66,7 +66,7 @@ function fetchAlbumInfoFromDiscogs(id)
 
 	$.getJSON(discogsUrl).done(function(data){ 
 		$("#showDiscogs").html(" ");
-		$("#showDiscogs").append("<p><img src=\""+data.resp.release.thumb+"\" style=\"float:left\">");
+		$("#showDiscogs").append("<p><img src=\""+data.resp.release.thumb+"\" style=\"float:right\">");
 		$("#showDiscogs").append(data.resp.release.title+" ("+data.resp.release.year+")");
 		$("#showDiscogs").append("<br>"+data.resp.release.artists[0].name+"</p>");
 		
