@@ -12,13 +12,15 @@ function getCatalogFromDiscogs(){
 	var urls     = new Array();
 	var jxhr     = [];
 	
+	$("#showDiscogs").html(" ");
+	
 	require(['$views/throbber#Throbber','$api/models'], function(Throbber,models,List) {	
 		
 		//catalogContentDiv = document.getElementById('catalogContent');
 		//throbber = Throbber.forElement(catalogContentDiv);
 		//$("#userCatalog").html(" ");
 		//throbber.show();
-		
+			
 		$.getJSON("http://api.discogs.com/users/"+userName.toLowerCase()+"/collection/folders/0/releases?per_page=100").done(function(data){ 
 			$.each(data.releases, function(i,release) {
 				addToCatalog(release);
@@ -61,15 +63,18 @@ function addToCatalog(release)
 function fetchAlbumInfoFromDiscogs(id)
 {
 	var discogsUrl = "http://api.discogs.com/release/"+id+"?f=json"
-	console.log(discogsUrl);
+
 	$.getJSON(discogsUrl).done(function(data){ 
-		console.log(data);
 		$("#showDiscogs").html(" ");
-		$("#showDiscogs").append("<a href="+data.resp.release.uri+">More information on Discogs</a>");
-		$("#showDiscogs").append("<img src=\""+data.resp.release.thumb+"\">");
-		data.resp.release.artists[0].name;
-		data.resp.release.title
-		data.resp.release.tracklist		
+		$("#showDiscogs").append("<p><img src=\""+data.resp.release.thumb+"\" style=\"float:left\">");
+		$("#showDiscogs").append(data.resp.release.title+" ("+data.resp.release.year+")");
+		$("#showDiscogs").append("<br>"+data.resp.release.artists[0].name+"</p>");
+		
+		data.resp.release.tracklist.forEach(function(song) {
+			$("#showDiscogs").append("<br>"+song.position+" - "+song.title);
+		});
+		
+		$("#showDiscogs").append("<br><a href="+data.resp.release.uri+">More information on Discogs</a>");		
 	})
 	.fail(function(error){
 		console.log(error);

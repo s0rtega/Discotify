@@ -93,7 +93,10 @@ code {-webkit-user-select: auto;}
 	vertical-align:middle; 
 	text-align:center
   }
-  
+
+#catalogContent{
+	with:700px;
+}
 #userCatalog {
     float: left;
     width: 50%;
@@ -102,4 +105,8 @@ code {-webkit-user-select: auto;}
     overflow: hidden;
     float: right;
     width: 50%;
+}
+
+#albumThumb{
+    float:left;
 }
