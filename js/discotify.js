@@ -43,6 +43,18 @@ function getCatalogFromDiscogs(){
 				$("#userCatalog").html(" ");
 				$("#userCatalog").append("<br/><ul class=\"pagination3\">"+catalog+"<br/></ul>");
 				$("ul.pagination3").quickPager({pageSize:"10"});
+				
+				var nextLink = '<li><a id="nextLink" href="#">Next</a></li>';
+				var prevLink = '<li><a id="prevLink" href="#">Prev</a></li>';
+				$(".simplePagerNav").prepend(prevLink).append(nextLink);
+				$("#nextLink").click(function(e) {
+					e.preventDefault();
+					$("li.currentPage").next("li[class^=simplePageNav]").find("a").click();
+				});
+				$("#prevLink").click(function(e) {
+					e.preventDefault();
+					$("li.currentPage").prev("li[class^=simplePageNav]").find("a").click();
+				});
 
 				//throbber.hide();						
 			});	
