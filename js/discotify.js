@@ -1,4 +1,9 @@
-$(function main(){                 
+$(function main(){      
+	$(".userSearchInput").keypress(function(e){
+        if(e.which == 13){//Enter key pressed
+            getCatalogFromDiscogs();
+        }
+    });           
 	$(".catalogLoader").click(function(){
 	  getCatalogFromDiscogs();
 	}); 
@@ -13,7 +18,8 @@ function getCatalogFromDiscogs(){
 	var jxhr     = [];
 	
 	$("#showDiscogs").html(" ");
-	
+	$("#userCatalog").html(" ");
+
 	require(['$views/throbber#Throbber','$api/models'], function(Throbber,models,List) {	
 		
 		//catalogContentDiv = document.getElementById('catalogContent');
@@ -41,11 +47,11 @@ function getCatalogFromDiscogs(){
 				searchUserPlaylists(catalogArray, userName);
 
 				$("#userCatalog").html(" ");
-				$("#userCatalog").append("<br/><ul class=\"pagination3\">"+catalog+"<br/></ul>");
+				$("#userCatalog").append("<br/><ul class=\"pagination3\" style=\"height: 350px;\">"+catalog+"<br/></ul>");
 				$("ul.pagination3").quickPager({pageSize:"10"});
 				
-				var nextLink = '<li><a id="nextLink" href="#">Next</a></li>';
-				var prevLink = '<li><a id="prevLink" href="#">Prev</a></li>';
+				var nextLink = '<li><a id="nextLink" href="#!">Next</a></li>';
+				var prevLink = '<li><a id="prevLink" href="#!">Prev</a></li>';
 				$(".simplePagerNav").prepend(prevLink).append(nextLink);
 				$("#nextLink").click(function(e) {
 					e.preventDefault();
@@ -68,7 +74,7 @@ function getCatalogFromDiscogs(){
 
 function addToCatalog(release)
 {
-	catalog += "<li><a href=\"#\" onClick=\"fetchAlbumInfoFromDiscogs("+release.basic_information.resource_url.split("/")[4]+")\">"+release.basic_information.artists[0].name+" - "+release.basic_information.title+"<br/></a></li>";
+	catalog += "<li><a href=\"#!\" onClick=\"fetchAlbumInfoFromDiscogs("+release.basic_information.resource_url.split("/")[4]+")\">"+release.basic_information.artists[0].name+" - "+release.basic_information.title+"<br/></a></li>";
 	catalogArray.push(release.basic_information.title+" - "+release.basic_information.artists[0].name);	
 }
 
@@ -77,8 +83,9 @@ function fetchAlbumInfoFromDiscogs(id)
 	var discogsUrl = "http://api.discogs.com/release/"+id+"?f=json"
 
 	$.getJSON(discogsUrl).done(function(data){ 
+		console.log(data);
 		$("#showDiscogs").html(" ");
-		$("#showDiscogs").append("<p><img src=\""+data.resp.release.thumb+"\" style=\"float:right\">");
+		$("#showDiscogs").append("<p><img src=\""+data.resp.release.thumb+"\" style=\"float:right\" onerror=\"imgError(this);\">");
 		$("#showDiscogs").append(data.resp.release.title+" ("+data.resp.release.year+")");
 		$("#showDiscogs").append("<br>"+data.resp.release.artists[0].name+"</p>");
 		
@@ -86,7 +93,7 @@ function fetchAlbumInfoFromDiscogs(id)
 			$("#showDiscogs").append("<br>"+song.position+" - "+song.title);
 		});
 		
-		$("#showDiscogs").append("<br><a href="+data.resp.release.uri+">More information on Discogs</a>");		
+		$("#showDiscogs").append("<br><br><a href="+data.resp.release.uri+">More information on Discogs</a>");		
 	})
 	.fail(function(error){
 		console.log(error);
@@ -179,4 +186,8 @@ function addAlbumSongsToPlaylist(playlistSnapshot,albumSnapshot,loadedPlaylist,m
 			loadedPlaylist.tracks.add(models.Track.fromURI(track.uri));			
 		}
 	}
+}
+
+function imgError(image) {
+     image.style.display = "none";
 }

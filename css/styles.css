@@ -7,12 +7,12 @@ ul.pagination3 li:hover {
 ul.pagination1 li,
 ul.pagination2 li,
 ul.pagination3 li {
-    padding: 10px;
+    padding: 8px;
     font-size: 13px;
     color: #fff;
     line-height: 1;
     width: 300px;
-    margin-bottom: 1px;
+    margin-bottom: 0.9px;
         list-style:none;
 }
 
@@ -23,9 +23,9 @@ ul.red {
 ul.simplePagerNav li{
     display:block;
     float: left;
-    padding: 10px;
-    margin-bottom: 10px;
-    font-size:14px;
+    padding: 9px;
+    margin-bottom: 9px;
+    font-size:13px;
 }
 
 ul.simplePagerNav li a{

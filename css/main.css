@@ -5,6 +5,7 @@ body {
 	line-height: 1.584;
 	color: #222;
 	background-color: #ecebe8;
+	height: 100%;
 }
 
 a {
@@ -104,5 +105,18 @@ code {-webkit-user-select: auto;}
 #showDiscogs {
     overflow: hidden;
     float: right;
-    width: 50%;
+    width: 45%;
+    padding-bottom: 20px;
+}
+.userSearchInput{
+	height: 20px;
+	padding-left: 3px;
+	font-size: 14px;
+}
+.catalogLoader{
+	height: 27.3px;
+	width: 27.3px;
+	position:relative;
+	top:-0.7px;
+	left:-7px;
 }
