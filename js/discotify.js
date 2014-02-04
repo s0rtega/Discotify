@@ -1,12 +1,12 @@
-$(function main(){      
-	$(".userSearchInput").keypress(function(e){
-        if(e.which == 13){//Enter key pressed
-            getCatalogFromDiscogs();
-        }
-    });           
+$(function main(){        
 	$(".catalogLoader").click(function(){
 	  getCatalogFromDiscogs();
-	}); 
+	});      
+	$(".userSearchInput").keypress(function(event){
+        if(event.which == 13){//Enter key pressed
+            $(".catalogLoader").click();
+        }
+    });
 })
 
 function getCatalogFromDiscogs(){
@@ -26,7 +26,7 @@ function getCatalogFromDiscogs(){
 		//throbber = Throbber.forElement(catalogContentDiv);
 		//$("#userCatalog").html(" ");
 		//throbber.show();
-			
+
 		$.getJSON("http://api.discogs.com/users/"+userName.toLowerCase()+"/collection/folders/0/releases?per_page=100").done(function(data){ 
 			$.each(data.releases, function(i,release) {
 				addToCatalog(release);
