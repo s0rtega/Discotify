@@ -49,6 +49,8 @@ function getCatalogFromDiscogs(){
 				$("#userCatalog").html(" ");
 				$("#userCatalog").append("<br/><ul class=\"pagination3\" style=\"height: 350px;\">"+catalog+"<br/></ul>");
 				$("ul.pagination3").quickPager({pageSize:"10"});
+				$("#userCatalog").html(" ");
+				$(".album-utils").style.display = '';
 				
 				var nextLink = '<li><a id="nextLink" href="#!">Next</a></li>';
 				var prevLink = '<li><a id="prevLink" href="#!">Prev</a></li>';
@@ -84,16 +86,16 @@ function fetchAlbumInfoFromDiscogs(id)
 
 	$.getJSON(discogsUrl).done(function(data){ 
 		console.log(data);
-		$("#showDiscogs").html(" ");
-		$("#showDiscogs").append("<p><img src=\""+data.resp.release.thumb+"\" style=\"float:right\" onerror=\"imgError(this);\">");
-		$("#showDiscogs").append(data.resp.release.title+" ("+data.resp.release.year+")");
-		$("#showDiscogs").append("<br>"+data.resp.release.artists[0].name+"</p>");
+		$(".product-overview").html(" ");
+		$(".product-overview").append("<p><img src=\""+data.resp.release.thumb+"\" style=\"float:right\" onerror=\"imgError(this);\">");
+		$(".product-overview").append(data.resp.release.title+" ("+data.resp.release.year+")");
+		$(".product-overview").append("<br>"+data.resp.release.artists[0].name+"</p>");
 		
 		data.resp.release.tracklist.forEach(function(song) {
-			$("#showDiscogs").append("<br>"+song.position+" - "+song.title);
+			$(".product-overview").append("<br>"+song.position+" - "+song.title);
 		});
 		
-		$("#showDiscogs").append("<br><br><a href="+data.resp.release.uri+">More information on Discogs</a>");		
+		$(".product-overview").append("<br><br><a href="+data.resp.release.uri+">More information on Discogs</a>");		
 	})
 	.fail(function(error){
 		console.log(error);

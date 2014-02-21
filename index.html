@@ -1,40 +1,75 @@
-<!DOCTYPE html>
-<html>
-    <head>
-		<link rel="stylesheet" href="$views/css/buttons.css">
-		<link rel="stylesheet" href="$views/css/image.css">
-		<link rel="stylesheet" href="$views/css/list.css">
-		<link rel="stylesheet" href="$views/css/popup.css">
-		<link rel="stylesheet" href="$views/css/scrollbar.css">
-		<link rel="stylesheet" href="$views/css/tabbar.css">
-		<link rel="stylesheet" href="$views/css/throbber.css">
-        <link rel="stylesheet" href="css/main.css">
-		<link rel="stylesheet" href="css/styles.css">
-		
-        <script type="text/javascript" src='http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js'></script>
-		<script type="text/javascript" src="js/discotify.js">></script>
-		<script type="text/javascript" src="js/quickpager.js">></script>
-		
-    </head>
+<!doctype html>
+<html class="no-js">
+
+<head>
+	<title>Discotify!</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta name="HandheldFriendly" content="true">
 	
-    <body>
-        <div id="wrapper">
-            <div id='container'>			
-                <div id='title'>
-                    <h1>Discotify!</h1>
-                    <h2>Get a playlist from a discogs´s user catalog</h2>
-                </div>				
-				<div id='search'>
-					<img id="discotifyImg" src='img/discogs-black.png'></img>
-					<form id="userSearch">
-						<input type="text" id="userName" class="userSearchInput" name="q" size="21" maxlength="120" placeholder="Discogs user name..."> <input type="button" class="catalogLoader" value=">">
-					</form>	 
-				</div>				
+	<link rel="stylesheet" href="$views/css/buttons.css">
+	<link rel="stylesheet" href="$views/css/image.css">
+	<link rel="stylesheet" href="$views/css/list.css">
+	<link rel="stylesheet" href="$views/css/popup.css">
+	<link rel="stylesheet" href="$views/css/scrollbar.css">
+	<link rel="stylesheet" href="$views/css/tabbar.css">
+	<link rel="stylesheet" href="$views/css/throbber.css">
+
+	<link rel="stylesheet" type="text/css" href="css/style.css" media="screen, handheld" />
+	<link rel="stylesheet" type="text/css" href="css/enhanced.css" media="screen  and (min-width: 40.5em)" />
+	<!--[if (lt IE 9)&(!IEMobile)]>
+	<link rel="stylesheet" type="text/css" href="enhanced.css" />
+	<![endif]-->
+	<script type="text/javascript" src="js/modernizr.js"></script>
+	<script type="text/javascript" src='http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js'></script>
+	<script type="text/javascript" src="js/discotify.js">></script>
+	<script type="text/javascript" src="js/quickpager.js">></script>
+</head>
+
+<body id="page">
+	
+	<header role="banner">
+    	<div>
+            <h1 class="logo"><a href="#"><img src="img/discogs-white.png" alt="Discotify!" /></a></h1> 
+			<!--Create awesome playlist from your friends collection!-->
+        </div>
+	</header>
+	
+	<div class="content app" role="main">	
+		<!-- Search DIV -->
+		<div id='search'>
+			<form id="userSearch">
+				<input type="text" id="userName" class="userSearchInput" name="q" placeholder="Discogs user name..."> <input type="button" class="catalogLoader" value=">">
+			</form>	 
+		</div>		
+		
+		<section class="product-main">
+        	<header>
+                <div class="product-overview"></div>                
+			</header>			
+			<div id="product-img" class="product-img">							
 				<div class='catalogContent'>
 					<div id='userCatalog'></div>	
 					<div id='showDiscogs'></div>
 				</div>
-            </div>
+			</div>
+		</section>
+	</div>
+	
+	<footer class="footer">
+		<div>
+            <nav class="nav" role="navigation">
+                <ul class="footer-nav">
+                    <li><a href="#">T-shirts</a></li>
+                </ul>
+            </nav>
+            <ul class="service-links">
+                <li class="tel" ><a href="tel:+1-800-275-2273" title="Call our customer Service">Call 800-888-8888</a></li>
+                <li><a href="#">About</a></span></li>
+                <li><a href="#page" class="top">Back to Top</a></li>
+            </ul>
         </div>
-    </body>
-</html>
+	</footer><!--end .footer-->
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"></script>
+</body>
+</html>	
