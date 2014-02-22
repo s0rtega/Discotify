@@ -1,4 +1,36 @@
-  /************End Global**************/
+html,
+body {
+	margin:0;
+	padding:0;
+	height:100%;
+}
+#wrapper {
+	min-height:100%;
+	position:relative;
+}
+#header {
+	padding:10px;
+    background: #333;
+	background: -moz-linear-gradient(top, #333 0%, #111 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#333), color-stop(100%,#111));
+	background: -webkit-linear-gradient(top, #333 0%,#111 100%); 
+	background: -o-linear-gradient(top, #333 0%,#111 100%); 
+	background: -ms-linear-gradient(top, #333 0%,#111 100%); 
+	background: linear-gradient(top, #333 0%,#111 100%);
+	color: #fff;
+}
+#content {
+	padding:10px;
+	padding-bottom:4.3em;   /* Height of the footer element */
+}
+#footer {
+	width:100%;
+	height:4.3em;
+	position:absolute;
+	bottom:0;   
+}
+
+/************End Global**************/
 h1 {
 	font-size: 2em;
 }
@@ -220,52 +252,4 @@ header[role="banner"] .nav {
 	.reviews-list > li {
 		padding: 2em 7em;
 	}
-}
-
-/************Comment Mode**************/
-#comment-link { 
-	position: fixed; 
-	bottom: 0; right: 0; 
-	z-index: 4; 
-	width: 100px; 
-	height: 100px; 
-	overflow: hidden;
-	line-height: 1;
-}
-.csstransforms #comment-link a { 
-	-webkit-transform: rotate(-45deg); 
-	-moz-transform: rotate(-45deg);
-	-o-transform: rotate(-45deg); 
-	-ms-transform: rotate(-45deg); 
-	width: 182px; 
-	height: 100px; 
-	margin-top: 40px;
-	padding: 5px; 
-	text-align: center; 
-}
-#comment-link a strong {
-	display: block;
-}
-#comment-container {
-	position: fixed;
-	top: auto;
-	padding: 1em 1em 4em;
-	bottom: 0;
-	left: 0;
-	width: 100%;
-	-webkit-transition: bottom 0.3s ease-out;
-	-moz-transition: bottom 0.3s ease-out;
-  	-webkit-transition: bottom 0.3s ease-out;
-  	-ms-transition: bottom 0.3s ease-out; 
-  	-o-transition: bottom 0.3s ease-out; 
-  	transition:  bottom 0.3s ease-out;
-}
-#close-comments {
-	display: block;	
-}
-
-/* For IE 7, which doesn't support display: inline-block; */
-label, input,textarea, .nav-anchors li, .nav li, .price, .star, .star li, .product-img nav, .product-img nav li, .product-utils a, .reviews header h2, .footer li {
-	zoom: 1;
-	*display: inline;
 }

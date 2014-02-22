@@ -24,7 +24,8 @@ function getCatalogFromDiscogs(){
 		
 		//catalogContentDiv = document.getElementById('catalogContent');
 		//throbber = Throbber.forElement(catalogContentDiv);
-		//$("#userCatalog").html(" ");
+		$("#userCatalog").html(" ");
+        $(".product-overview").html(" ");
 		//throbber.show();
 
 		$.getJSON("http://api.discogs.com/users/"+userName.toLowerCase()+"/collection/folders/0/releases?per_page=100").done(function(data){ 
@@ -45,12 +46,10 @@ function getCatalogFromDiscogs(){
 			});			
 			$.when.apply($, jxhr).done(function() {
 				searchUserPlaylists(catalogArray, userName);
-
-				$("#userCatalog").html(" ");
 				$("#userCatalog").append("<br/><ul class=\"pagination3\" style=\"height: 350px;\">"+catalog+"<br/></ul>");
 				$("ul.pagination3").quickPager({pageSize:"10"});
-				$("#userCatalog").html(" ");
-				$(".album-utils").style.display = '';
+				//$("#userCatalog").html(" ");
+				//$(".album-utils").style.display = '';
 				
 				var nextLink = '<li><a id="nextLink" href="#!">Next</a></li>';
 				var prevLink = '<li><a id="prevLink" href="#!">Prev</a></li>';
