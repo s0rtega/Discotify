@@ -1,3 +1,6 @@
+var totalDiscos = 0;
+var numDisco = 0;
+
 $(function main(){        
 	$(".catalogLoader").click(function(){
 	  getCatalogFromDiscogs();
@@ -22,11 +25,10 @@ function getCatalogFromDiscogs(){
 
 	require(['$views/throbber#Throbber','$api/models'], function(Throbber,models,List) {	
 		
-		//catalogContentDiv = document.getElementById('catalogContent');
-		//throbber = Throbber.forElement(catalogContentDiv);
-		$("#userCatalog").html(" ");
-        $(".product-overview").html(" ");
-		//throbber.show();
+		userCatalogContentDiv = document.getElementById('userCatalog');
+		throbber = Throbber.forElement(userCatalogContentDiv);
+		//$("#userCatalog").html(" ");
+		throbber.show();
 
 		$.getJSON("http://api.discogs.com/users/"+userName.toLowerCase()+"/collection/folders/0/releases?per_page=100").done(function(data){ 
 			$.each(data.releases, function(i,release) {
@@ -45,6 +47,7 @@ function getCatalogFromDiscogs(){
 				);
 			});			
 			$.when.apply($, jxhr).done(function() {
+				console.log("Numero de discos: "+catalogArray.lenght);
 				searchUserPlaylists(catalogArray, userName);
 				$("#userCatalog").append("<br/><ul class=\"pagination3\" style=\"height: 350px;\">"+catalog+"<br/></ul>");
 				$("ul.pagination3").quickPager({pageSize:"10"});
@@ -61,9 +64,7 @@ function getCatalogFromDiscogs(){
 				$("#prevLink").click(function(e) {
 					e.preventDefault();
 					$("li.currentPage").prev("li[class^=simplePageNav]").find("a").click();
-				});
-
-				//throbber.hide();						
+				});					
 			});	
 		})
 		.fail(function(error){
@@ -170,6 +171,7 @@ function loadSongsForAlbums(albums,playlist,models)
 			var album = models.Album.fromURI(album);
 			album.load("tracks").done(function(albumlist) {
 				albumlist.tracks.snapshot().done(function(albumSnapshot) {	
+					window.totalDiscos += 1;
 					loadedPlaylist.tracks.snapshot().done(function(playlistSnapshot) {
 						addAlbumSongsToPlaylist(playlistSnapshot,albumSnapshot,loadedPlaylist,models)
 					});								
@@ -187,6 +189,14 @@ function addAlbumSongsToPlaylist(playlistSnapshot,albumSnapshot,loadedPlaylist,m
 			loadedPlaylist.tracks.add(models.Track.fromURI(track.uri));			
 		}
 	}
+	window.numDisco += 1;
+	
+	console.log(window.numDisco);
+	console.log(window.totalDiscos);
+	if (window.numDisco == window.totalDiscos){
+		throbber.hide();
+	}
+	
 }
 
 function imgError(image) {
