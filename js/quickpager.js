@@ -1,4 +1,4 @@
-//-------------------------------------------------
+//----------------------------------------------------------------------------
 //                Quick Pager jquery plugin
 //                Created by dan and emanuel @geckonm.com
 //                www.geckonewmedia.com
@@ -6,7 +6,8 @@
 //
 //                18/09/09 * bug fix by John V - http://blog.geekyjohn.com/
 //                1.2 - allows reloading of pager with new items
-//-------------------------------------------------
+//				  25/02/2014 * Modified for s0rtega for discotify!
+//----------------------------------------------------------------------------
 
 (function($) {
         
@@ -22,15 +23,14 @@
                 var options = $.extend(defaults, options);
                 
                 
-                return this.each(function() {
-        
+                return this.each(function() {        
                                                 
                         var selector = $(this);        
                         var pageCounter = 1;
                         
                         selector.wrap("<div class='simplePagerContainer'></div>");
                         
-                        selector.parents(".simplePagerContainer").find("ul.simplePagerNav").remove();
+                        $(".navegadorPaginas").empty();
                         
                         selector.children().each(function(i){
                                         
@@ -64,50 +64,26 @@
                         }
                         pageNav += "</ul>";
                         
-                        if(!options.holder) {
-                                switch(options.pagerLocation)
-                                {
-                                case "before":
-                                        selector.before(pageNav);
-                                break;
-                                case "both":
-                                        selector.before(pageNav);
-                                        selector.after(pageNav);
-                                break;
-                                default:
-                                        selector.after(pageNav);
-                                }
-                        }
-                        else {
-                                $(options.holder).append(pageNav);
-                        }
-                        
+						$(".navegadorPaginas").append(pageNav);
+						
                         //pager navigation behaviour
-                        selector.parent().find(".simplePagerNav a").click(function() {
-                                        
-                                //grab the REL attribute
-                                var clickedLink = $(this).attr("rel");
-                                options.currentPage = clickedLink;
-                                
-                                if(options.holder) {
-                                        $(this).parent("li").parent("ul").parent(options.holder).find("li.currentPage").removeClass("currentPage");
-                                        $(this).parent("li").parent("ul").parent(options.holder).find("a[rel='"+clickedLink+"']").parent("li").addClass("currentPage");
-                                }
-                                else {
-                                        //remove current current (!) page
-                                        $(this).parent("li").parent("ul").parent(".simplePagerContainer").find("li.currentPage").removeClass("currentPage");
-                                        //Add current page highlighting
-                                        $(this).parent("li").parent("ul").parent(".simplePagerContainer").find("a[rel='"+clickedLink+"']").parent("li").addClass("currentPage");
-                                }
-                                
-                                //hide and show relevant links
-                                selector.children().hide();                        
-                                selector.find(".simplePagerPage"+clickedLink).show();
-                                
-                                return false;
+                        $(".navegadorPaginas").find(".simplePagerNav a").click(function() {                                        
+							//grab the REL attribute
+							var clickedLink = $(this).attr("rel");
+							options.currentPage = clickedLink;
+
+							//remove current current (!) page
+							$(this).parent("li").parent("ul").parent(".navegadorPaginas").find("li.currentPage").removeClass("currentPage");
+							//Add current page highlighting
+							$(this).parent("li").parent("ul").parent(".navegadorPaginas").find("a[rel='"+clickedLink+"']").parent("li").addClass("currentPage");
+						   
+							//hide and show relevant links
+							selector.children().hide();                        
+							selector.find(".simplePagerPage"+clickedLink).show();
+							
+							return false;
                         });
                 });
-        }
-        
+        }  
 
 })(jQuery);

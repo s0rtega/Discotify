@@ -120,3 +120,8 @@ code {-webkit-user-select: auto;}
 	top:-0.7px;
 	left:-7px;
 }
+.navegadorPaginas{
+	color:green;
+	width:100%;
+	height:3em;
+}

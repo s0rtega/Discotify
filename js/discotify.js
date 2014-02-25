@@ -1,3 +1,4 @@
+/* Global vars to control the Throbber */
 var totalDiscos = 0;
 var numDisco = 0;
 
@@ -20,14 +21,14 @@ function getCatalogFromDiscogs(){
 	var urls     = new Array();
 	var jxhr     = [];
 	
+	$(".navegadorPaginas").empty();
 	$("#showDiscogs").html(" ");
 	$("#userCatalog").html(" ");
 
 	require(['$views/throbber#Throbber','$api/models'], function(Throbber,models,List) {	
 		
-		userCatalogContentDiv = document.getElementById('userCatalog');
+		userCatalogContentDiv = document.getElementsByClassName('product-main')[0];
 		throbber = Throbber.forElement(userCatalogContentDiv);
-		//$("#userCatalog").html(" ");
 		throbber.show();
 
 		$.getJSON("http://api.discogs.com/users/"+userName.toLowerCase()+"/collection/folders/0/releases?per_page=100").done(function(data){ 
@@ -56,6 +57,7 @@ function getCatalogFromDiscogs(){
 				
 				var nextLink = '<li><a id="nextLink" href="#!">Next</a></li>';
 				var prevLink = '<li><a id="prevLink" href="#!">Prev</a></li>';
+				
 				$(".simplePagerNav").prepend(prevLink).append(nextLink);
 				$("#nextLink").click(function(e) {
 					e.preventDefault();
@@ -70,6 +72,7 @@ function getCatalogFromDiscogs(){
 		.fail(function(error){
 			$("#userCatalog").html(" ");
 			$("#userCatalog").append("Sorry, we can´t access to this user collection!");
+			throbber.hide();
 		});
 	});
 };
@@ -104,7 +107,6 @@ function fetchAlbumInfoFromDiscogs(id)
 
 function showPlaylist(uri,models,List)
 {
-	//$("#userCatalog").html(" ");
 	var playlist = models.Playlist.fromURI(uri);
 	var list = List.forPlaylist(playlist);
 
@@ -115,9 +117,6 @@ function showPlaylist(uri,models,List)
 	list.height = "fixed";
 	
 	var userCatalogDiv = document.getElementById("userCatalog");
-	//userCatalogDiv.appendChild(list.node);
-
-	//list.init();
 }
 
 function searchUserPlaylists(catalogArray, userName)
@@ -195,8 +194,7 @@ function addAlbumSongsToPlaylist(playlistSnapshot,albumSnapshot,loadedPlaylist,m
 	console.log(window.totalDiscos);
 	if (window.numDisco == window.totalDiscos){
 		throbber.hide();
-	}
-	
+	}	
 }
 
 function imgError(image) {

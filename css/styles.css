@@ -17,7 +17,13 @@ ul.pagination3 li {
 }
 
 ul.red {
-        outline:10px solid red;
+    outline:10px solid red;
+}
+
+.navegadorPaginas{
+	position: relative;
+	float: left;
+	margin: 0.5em;
 }
 
 ul.simplePagerNav li{
