@@ -55,13 +55,12 @@ h2 {
 	font-weight: normal;
 	margin: 0;
 	text-rendering: optimizeLegibility;
-	text-shadow: 0 1px 0 #fff;
+
 }
 h3 {
 	margin: 0;
 	font-weight: normal;
 	text-rendering: optimizeLegibility;
-	text-shadow: 0 1px 0 #fff;
 }
 p {
 	margin: 0 0 1em;
@@ -310,7 +309,6 @@ header[role="banner"] .nav {
 	position: relative;
 	text-align: left;
 	overflow: hidden;
-	text-shadow: 0 1px 0 #fff;
 	-webkit-animation: fadein 0.4s ease-out 1;
 	-moz-animation: fadein 0.4s ease-out 1;
 	-ms-animation: fadein 0.4s ease-out 1;
@@ -325,13 +323,14 @@ header[role="banner"] .nav {
 }
 .product-main {
 	overflow: hidden;
-	max-width: 63em;
 	margin: 0 auto;
 	padding: 1em;
+	width: 100%;
 }
 .product-overview {
 	margin-bottom: 1em;	
 	float:right;
+	display: inline-block;
 }
 .price {
 	font-weight: bold;

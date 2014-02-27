@@ -31,6 +31,20 @@ ul.red {
 	display: inline-block;
 }
 
+.catalogContent{
+	float:left;
+	width: 50%;
+	text-align:center;
+}
+
+.product-overview{
+	width: 39%;
+}
+
+.simplePagerContainer{
+	display:inline-block;
+}
+
 ul.simplePagerNav li{
     display:block;
     float: left;
