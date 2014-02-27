@@ -36,11 +36,11 @@
         
         <div id="content">
             <div class="content app" role="main">	
-                <!-- Search DIV -->
                 <div id='search'>
-                    <form id="userSearch">
-                        <input type="text" id="userName" class="userSearchInput" name="q" placeholder="Discogs user name..."> <input type="button" class="catalogLoader" value=">">
-                    </form>	 
+					<form action="#" onsubmit="getCatalogFromDiscogs()" class="form-wrapper cf">
+						<input id="userName" type="text" placeholder="Search for a discogs user..." required>
+						<button type="submit">Search</button>
+					</form>
                 </div>		
 				
 				<ul class="navegadorPaginas"></ul>
@@ -68,8 +68,7 @@
                     <li><a href="#">About</a></span></li>
                 </ul>
             </div>
-        </footer><!--end .footer-->
-        
+        </footer>        
     </div>    
 </body>
 </html>	
