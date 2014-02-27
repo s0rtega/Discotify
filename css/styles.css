@@ -24,6 +24,11 @@ ul.red {
 	position: relative;
 	float: left;
 	margin: 0.5em;
+	text-align:center;
+}
+
+.navegadorPaginas ul{
+	display: inline-block;
 }
 
 ul.simplePagerNav li{

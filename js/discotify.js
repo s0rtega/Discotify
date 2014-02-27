@@ -52,8 +52,6 @@ function getCatalogFromDiscogs(){
 				searchUserPlaylists(catalogArray, userName);
 				$("#userCatalog").append("<br/><ul class=\"pagination3\" style=\"height: 350px;\">"+catalog+"<br/></ul>");
 				$("ul.pagination3").quickPager({pageSize:"10"});
-				//$("#userCatalog").html(" ");
-				//$(".album-utils").style.display = '';
 				
 				var nextLink = '<li><a id="nextLink" href="#!">Next</a></li>';
 				var prevLink = '<li><a id="prevLink" href="#!">Prev</a></li>';
