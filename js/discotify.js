@@ -30,7 +30,7 @@ function getCatalogFromDiscogs(){
 		userCatalogContentDiv = document.getElementsByClassName('product-main')[0];
 		throbber = Throbber.forElement(userCatalogContentDiv);
 		throbber.show();
-
+		
 		$.getJSON("http://api.discogs.com/users/"+userName.toLowerCase()+"/collection/folders/0/releases?per_page=100").done(function(data){ 
 			$.each(data.releases, function(i,release) {
 				addToCatalog(release);
@@ -48,7 +48,6 @@ function getCatalogFromDiscogs(){
 				);
 			});			
 			$.when.apply($, jxhr).done(function() {
-				console.log("Numero de discos: "+catalogArray.lenght);
 				searchUserPlaylists(catalogArray, userName);
 				$("#userCatalog").append("<br/><ul class=\"pagination3\" style=\"height: 350px;\">"+catalog+"<br/></ul>");
 				$("ul.pagination3").quickPager({pageSize:"10"});
@@ -119,7 +118,7 @@ function showPlaylist(uri,models,List)
 
 function searchUserPlaylists(catalogArray, userName)
 {		
-	require(['$api/search#Search','$api/models','$api/library#Library','$views/list#List'], function(Search, models, Library, List) {	
+	require(['$api/search#Search','$api/models','$api/library#Library','$views/list#List','$views/buttons#ShareButton'], function(Search, models, Library, List, ShareButton) {	
 
 		var exists = false;	
 		
@@ -132,20 +131,34 @@ function searchUserPlaylists(catalogArray, userName)
 				exists = true;
 				getAlbumsFromCatalog(catalogArray, Search,models,playlist);
 				showPlaylist(playlist.uri,models,List);
+				
+				var share = document.getElementsByClassName("footer-nav")[0];
+				var button = ShareButton.forPlaylist(playlist);
+				button.setLabel('Share!');
+				button.setIconClass('shareButton');
+				button.node.removeAttribute("style")
+				share.appendChild(button.node);	
+
+
+				
 				break;
 			  }
 			}
+			
+
 			if (exists == false){
 				models.Playlist.create(userName.toLowerCase()+"´s collection").done(function(createPlaylist) {
 					playlist = createPlaylist
 					showPlaylist(playlist.uri,models,List);
-					getAlbumsFromCatalog(catalogArray, Search,models,playlist)
+					getAlbumsFromCatalog(catalogArray, Search,models,playlist);
+					var button = ShareButton.forPlaylist(playlist);
+					$("#footer-nav").appendChild(button);
 				});
 			}
 			
 			
 		});	
-
+	
 	});                     		
 }
 
@@ -187,9 +200,7 @@ function addAlbumSongsToPlaylist(playlistSnapshot,albumSnapshot,loadedPlaylist,m
 		}
 	}
 	window.numDisco += 1;
-	
-	console.log(window.numDisco);
-	console.log(window.totalDiscos);
+
 	if (window.numDisco == window.totalDiscos){
 		throbber.hide();
 	}	

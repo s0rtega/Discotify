@@ -598,5 +598,8 @@ header[role="banner"] .nav {
 .navegadorPaginas{
 	color:black;
 	width:100%;
-	height:6em;
+	height:5em;
+}
+.shareButton{
+	background-color:red;
 }
