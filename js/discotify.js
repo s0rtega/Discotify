@@ -24,9 +24,11 @@ function getCatalogFromDiscogs(){
 	$(".navegadorPaginas").empty();
 	$("#showDiscogs").html(" ");
 	$("#userCatalog").html(" ");
+	$(".product-overview").html(" ");
+	$("#searchForm").appendTo("#search");
 
-	require(['$views/throbber#Throbber','$api/models'], function(Throbber,models,List) {	
-		
+	require(['$views/throbber#Throbber','$api/models'], function(Throbber,models,List) {
+	
 		userCatalogContentDiv = document.getElementsByClassName('product-main')[0];
 		throbber = Throbber.forElement(userCatalogContentDiv);
 		throbber.show();
@@ -137,25 +139,27 @@ function searchUserPlaylists(catalogArray, userName)
 				button.setLabel('Share!');
 				button.setIconClass('shareButton');
 				button.node.removeAttribute("style")
-				share.appendChild(button.node);	
-
-
+				$(".sp-button").remove();
+				share.appendChild(button.node).slideDown("fast");	
 				
 				break;
 			  }
-			}
-			
+			}			
 
 			if (exists == false){
 				models.Playlist.create(userName.toLowerCase()+"´s collection").done(function(createPlaylist) {
 					playlist = createPlaylist
 					showPlaylist(playlist.uri,models,List);
 					getAlbumsFromCatalog(catalogArray, Search,models,playlist);
+					
+					var share = document.getElementsByClassName("footer-nav")[0];
 					var button = ShareButton.forPlaylist(playlist);
-					$("#footer-nav").appendChild(button);
+					button.setLabel('Share!');
+					button.setIconClass('shareButton');
+					button.node.removeAttribute("style")
+					share.appendChild(button.node);	
 				});
-			}
-			
+			}			
 			
 		});	
 	

@@ -37,15 +37,16 @@
         <div id="content">
             <div class="content app" role="main">	
                 <div id='search'>
-					<form action="#" onsubmit="getCatalogFromDiscogs()" class="form-wrapper cf">
-						<input id="userName" type="text" placeholder="Search for a discogs user..." required>
-						<button type="submit">Search</button>
-					</form>
+
                 </div>		
 				
 				<ul class="navegadorPaginas"></ul>
                 
-                <section class="product-main">			
+                <section class="product-main">	
+					<form action="#" onsubmit="getCatalogFromDiscogs()" class="form-wrapper cf" id="searchForm">
+						<input id="userName" type="text" placeholder="Search for a discogs user..." required>
+						<button type="submit">Search</button>
+					</form>				
 					<div class='albumList'>
                         <div class='catalogContent'>
                             <div id='userCatalog'></div>	
