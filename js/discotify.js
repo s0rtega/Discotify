@@ -26,6 +26,8 @@ function getCatalogFromDiscogs(){
 	$("#userCatalog").html(" ");
 	$(".product-overview").html(" ");
 	$("#searchForm").appendTo("#search");
+	$("#centeredSearch").remove();
+	
 
 	require(['$views/throbber#Throbber','$api/models'], function(Throbber,models,List) {
 	
@@ -140,7 +142,7 @@ function searchUserPlaylists(catalogArray, userName)
 				button.setIconClass('shareButton');
 				button.node.removeAttribute("style")
 				$(".sp-button").remove();
-				share.appendChild(button.node).slideDown("fast");	
+				share.appendChild(button.node);	
 				
 				break;
 			  }
@@ -156,7 +158,8 @@ function searchUserPlaylists(catalogArray, userName)
 					var button = ShareButton.forPlaylist(playlist);
 					button.setLabel('Share!');
 					button.setIconClass('shareButton');
-					button.node.removeAttribute("style")
+					button.node.removeAttribute("style");
+					$(".sp-button").remove();
 					share.appendChild(button.node);	
 				});
 			}			

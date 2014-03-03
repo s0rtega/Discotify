@@ -328,7 +328,8 @@ header[role="banner"] .nav {
 	width: 100%;
 }
 .product-overview {
-	margin-bottom: 1em;	
+	margin-bottom: 0.85em;	
+	padding-top:1em;
 	float:right;
 	display: inline-block;
 }

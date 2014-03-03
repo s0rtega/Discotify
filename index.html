@@ -33,30 +33,29 @@
                 <!--Create awesome playlist from your friends collection!-->
             </div>
         </header>
+		
+		<div id='centeredSearch'>
+			<form action="#" onsubmit="getCatalogFromDiscogs()" class="form-wrapper cf" id="searchForm">
+				<input id="userName" type="text" placeholder="Search for discogs user´s..." required>
+				<button type="submit">Search</button>
+			</form>
+		</div>
         
         <div id="content">
             <div class="content app" role="main">	
                 <div id='search'>
-
-                </div>		
-				
+                </div>					
 				<ul class="navegadorPaginas"></ul>
-                
                 <section class="product-main">	
-					<form action="#" onsubmit="getCatalogFromDiscogs()" class="form-wrapper cf" id="searchForm">
-						<input id="userName" type="text" placeholder="Search for a discogs user..." required>
-						<button type="submit">Search</button>
-					</form>				
 					<div class='albumList'>
                         <div class='catalogContent'>
                             <div id='userCatalog'></div>	
                         </div>
 						<div class="product-overview"></div>
 					</div>
-                </section>
-                
-            </div>
-        </div> 
+                </section>				
+			</div>
+        </div>
 
         <footer id="footer">
             <div>

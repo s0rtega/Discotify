@@ -32,6 +32,7 @@ ul.red {
 }
 
 .catalogContent{
+	padding-left:2.8em;
 	float:left;
 	width: 50%;
 	text-align:center;
@@ -197,8 +198,12 @@ table.pageme td {
 	padding: 0;
 }
 
-.sp-button { 
-	outline: 0; 
-	background: none;
-	border: 0;
+#centeredSearch{     
+	left:50%;
+	top:50%;
+	height: 6em;
+   -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+   transform: translate(-50%, -50%);
+   position:absolute;
 }
