@@ -4,11 +4,8 @@
   },
   "BundleIdentifier": "discotify",
   "AppDescription": {
-    "en": "Create playlist from Discogs user´s collections"
+    "en": "Create awesome playlists from Discogs user´s collections"
   },
-  "AcceptedLinkTypes": [
-    "playlist"
-  ],
   "BundleType": "Application",
   "BundleVersion": "0.2",
   "Dependencies": {
