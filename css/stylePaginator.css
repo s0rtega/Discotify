@@ -1,0 +1,57 @@
+ul.pagination1 li:hover,
+ul.pagination2 li:hover,
+ul.pagination3 li:hover {
+        background-color: #FF9500;
+}
+
+ul.pagination1 li,
+ul.pagination2 li,
+ul.pagination3 li {
+    padding: 8px;
+    font-size: 13px;
+    color: #fff;
+    line-height: 1;
+    width: 300px;
+    margin-bottom: 0.9px;
+    list-style:none;
+}
+
+ul.red {
+    outline:10px solid red;
+}
+
+.simplePagerContainer{
+	display:inline-block;
+}
+
+ul.simplePagerNav li{
+    display:block;
+    float: left;
+    padding: 9px;
+    margin-bottom: 9px;
+    font-size:13px;
+}
+
+ul.simplePagerNav li a{
+    color: #333;
+    text-decoration: none;
+}
+
+li.currentPage {
+    background: red;
+    background: #FF9500;        
+}
+
+ul.simplePagerNav li.currentPage a {
+        color: #fff;        
+}
+
+table.pageme {
+    border-collapse: collapse;
+    border: 1px solid #ccc;
+}
+
+table.pageme td {
+    border-collapse: collapse;
+    border: 1px solid #ccc;
+}
