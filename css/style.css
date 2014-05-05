@@ -137,14 +137,19 @@ header[role="banner"] > div {
 }
 
 .catalogContent{
-	padding-left:2.8em;
+	padding-left:9.8em;
 	float:left;
-	width: 50%;
+	width: 40%;
 	text-align:center;
 }
 
 .product-overview{
-	width: 39%;
+	width: 43%;
+    margin-right: 4.5em;
+}
+
+.simplePagerContainer{
+    margin-left: 14em;
 }
 
 .logo {

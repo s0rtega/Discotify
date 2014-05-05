@@ -91,7 +91,7 @@ function fetchAlbumInfoFromDiscogs(id)
 	$.getJSON(discogsUrl).done(function(data){ 
 		console.log(data);
 		$(".product-overview").html(" ");
-		$(".product-overview").append("<p><img src=\""+data.resp.release.thumb+"\" style=\"float:right\" onerror=\"imgError(this);\">");
+		$(".product-overview").append("<p><img src=\""+data.resp.release.thumb+"\" style=\"float:right; margin:1.2em 18em 0em 0em\" onerror=\"imgError(this);\">");
 		$(".product-overview").append(data.resp.release.title+" ("+data.resp.release.year+")");
 		$(".product-overview").append("<br>"+data.resp.release.artists[0].name+"</p>");
 		
