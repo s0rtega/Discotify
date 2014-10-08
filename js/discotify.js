@@ -42,15 +42,21 @@ function getCatalogFromDiscogs(){
 			for (var i = 2, p = data.pagination.pages; i <= p; i++) {
 				urls.push("http://api.discogs.com/users/"+userName.toLowerCase()+"/collection/folders/0/releases?per_page=100&page="+i);
 			}
+            
 			$.each(urls, function (i, url) {
-				jxhr.push(
-					$.getJSON(url, function (data) {
-						$.each(data.releases, function(i,release) {
-							addToCatalog(release);
-						});
-					})
-				);
-			});			
+                $.ajax({
+                  async: false,
+                  url: url,
+                  dataType: 'json',
+                  timeout: 10000, //3 second timeout
+                  success: function (data) {
+                    $.each(data.releases, function(i,release) {
+                        addToCatalog(release);
+                    });
+                  },
+                });
+			});	
+            
 			$.when.apply($, jxhr).done(function() {
 				searchUserPlaylists(catalogArray, userName);
 				$("#userCatalog").append("<br/><ul class=\"pagination3\" style=\"height: 350px;\">"+catalog+"<br/></ul>");
