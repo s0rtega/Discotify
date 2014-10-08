@@ -48,7 +48,6 @@ function getCatalogFromDiscogs(){
                   async: false,
                   url: url,
                   dataType: 'json',
-                  timeout: 10000, //3 second timeout
                   success: function (data) {
                     $.each(data.releases, function(i,release) {
                         addToCatalog(release);
