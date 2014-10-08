@@ -86,20 +86,20 @@ function addToCatalog(release)
 
 function fetchAlbumInfoFromDiscogs(id)
 {
-	var discogsUrl = "http://api.discogs.com/release/"+id+"?f=json"
+	var discogsUrl = "http://api.discogs.com/releases/"+id+"?f=jsonp"
 
 	$.getJSON(discogsUrl).done(function(data){ 
 		console.log(data);
 		$(".product-overview").html(" ");
-		$(".product-overview").append("<p><img src=\""+data.resp.release.thumb+"\" style=\"float:right; margin:1.2em 18em 0em 0em\" onerror=\"imgError(this);\">");
-		$(".product-overview").append(data.resp.release.title+" ("+data.resp.release.year+")");
-		$(".product-overview").append("<br>"+data.resp.release.artists[0].name+"</p>");
+		$(".product-overview").append("<p><img src=\""+data.images[0].uri+"\" style=\"float:right; margin:1.2em 18em 0em 0em\" onerror=\"imgError(this);\">");
+		$(".product-overview").append(data.title+" ("+data.year+")");
+		$(".product-overview").append("<br>"+data.artists[0].name+"</p>");
 		
-		data.resp.release.tracklist.forEach(function(song) {
+		data.tracklist.forEach(function(song) {
 			$(".product-overview").append("<br>"+song.position+" - "+song.title);
 		});
 		
-		$(".product-overview").append("<br><br><a href="+data.resp.release.uri+">More information on Discogs</a>");		
+		$(".product-overview").append("<br><br><a href="+data.release.uri+">More information on Discogs</a>");		
 	})
 	.fail(function(error){
 		console.log(error);
