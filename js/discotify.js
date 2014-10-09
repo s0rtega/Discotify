@@ -135,7 +135,8 @@ function searchUserPlaylists(catalogArray, userName)
 		returnedLibrary.playlists.snapshot().done(function(snapshot) {
 			for (var i = 0, l = snapshot.length; i < l; i++) {
 			  var playlist = snapshot.get(i);
-			  if (playlist.name == userName.toLowerCase()+"´s collection"){
+
+			  if (playlist != null && playlist.name == userName.toLowerCase()+"´s collection"){
 				playlist = models.Playlist.fromURI(playlist.uri);
 				exists = true;
 				getAlbumsFromCatalog(catalogArray, Search,models,playlist);
