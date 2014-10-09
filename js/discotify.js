@@ -104,7 +104,7 @@ function fetchAlbumInfoFromDiscogs(id)
 			$(".product-overview").append("<br>"+song.position+" - "+song.title);
 		});
 		
-		$(".product-overview").append("<br><br><a href="+data.release.uri+">More information on Discogs</a>");		
+		$(".product-overview").append("<br><br><a href="+data.uri+">More information on Discogs</a>");		
 	})
 	.fail(function(error){
 		console.log(error);
